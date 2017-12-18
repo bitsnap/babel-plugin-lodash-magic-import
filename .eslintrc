@@ -1,0 +1,38 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "node": true
+  },
+  "plugins": [
+    "lodash-fp",
+    "unicorn"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 5
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  },
+  "extends": [
+    "airbnb",
+    "plugin:lodash-fp/recommended",
+    "plugin:unicorn/recommended"
+  ],
+  "rules": {
+    "no-continue": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-filename-extension": "off",
+    "unicorn/no-fn-reference-in-iterator": "off",
+    "import/prefer-default-export": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "case": "camelCase"
+      }
+    ]
+  }
+}

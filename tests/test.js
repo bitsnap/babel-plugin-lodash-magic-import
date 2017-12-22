@@ -52,8 +52,8 @@ const testData = [
   ],
 ];
 
-const transformTestTable = _.map(([input, output]) => [input, _.pipe(_.concat(strict), normalize, _.join(''))(output)])(testData);
-console.log(transformTestTable);
+const transformTestTable = _.map(([input, output]) => [input, _.pipe(_.concat(strict), _.join(''), normalize, _.join(''))(output)])(testData);
+
 //
 test('Test', (t) => {
   t.plan(transformTestTable.length);

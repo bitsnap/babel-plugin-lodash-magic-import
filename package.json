@@ -1,7 +1,7 @@
 {
-  "name": "babel-plugin-transform-lib-magic-import",
+  "name": "babel-plugin-lodash-magic-import",
   "version": "0.1.0",
-  "description": "Transform library function definition in imports",
+  "description": "Transform lodash function definition in imports",
   "keywords": [
     "babel",
     "transform",

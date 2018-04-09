@@ -1,5 +1,12 @@
 # lodash-magic-import
 
+[![npmjs](https://img.shields.io/npm/v/babel-plugin-lodash-magic-import.svg)](https://npmjs.org/package/babel-plugin-lodash-magic-import)
+[![downloads](https://img.shields.io/npm/dw/localeval.svg)](https://npmjs.org/package/babel-plugin-lodash-magic-import)
+[![CircleCI](https://img.shields.io/circleci/project/github/bitsnap/babel-plugin-lodash-magic-import.svg)](https://circleci.com/gh/bitsnap/babel-plugin-lodash-magic-import)
+[![Coverage Status](https://coveralls.io/repos/github/bitsnap/babel-plugin-lodash-magic-import/badge.svg?branch=master)](https://coveralls.io/github/bitsnap/babel-plugin-lodash-magic-import?branch=master) 
+[![dependencies](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import.svg)](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import)
+[![devDependencies](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import/dev-status.svg)](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import#info=devDependencies)
+
 Magic import 🍒 picks lodash 📦 for you.
 
 Transforms 

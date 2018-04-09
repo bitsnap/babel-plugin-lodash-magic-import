@@ -22,4 +22,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: yarn test | ./node_modules/.bin/tap-summary
+      - run: yarn test

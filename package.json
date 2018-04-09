@@ -24,6 +24,7 @@
     "Yuriy Yarosh <void.nugget@gmail.com>"
   ],
   "license": "MIT",
+  "repository": "github:bitsnap/babel-plugin-lodash-magic-import",
   "peerDependencies": {
     "lodash": "^4.17.5"
   },

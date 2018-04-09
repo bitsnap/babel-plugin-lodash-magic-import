@@ -3,7 +3,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:9.11.1
+
     working_directory: ~/repo
 
     steps:
@@ -21,6 +22,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: yarn test
-
-
+      - run: yarn test | ./node_modules/.bin/tap-summary

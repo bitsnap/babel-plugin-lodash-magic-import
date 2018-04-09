@@ -50,7 +50,7 @@ You know the drill already...
 
 It's much simpler.
 
-We'll provide a eslint plugin and a module caching support for node's dynamic require in the nearest future.
+We'll provide an eslint plugin and the module caching support, using dynamic `require`, in the nearest future.
 
 `lodash-magic-import` is completely pointless with `lodash-es` and prohibits usage of Seq and _.chain methods, for the greater good 🎀.
 

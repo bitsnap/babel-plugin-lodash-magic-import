@@ -6,6 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/bitsnap/babel-plugin-lodash-magic-import/badge.svg?branch=master)](https://coveralls.io/github/bitsnap/babel-plugin-lodash-magic-import?branch=master) 
 [![dependencies](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import.svg)](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import)
 [![devDependencies](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import/dev-status.svg)](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import#info=devDependencies)
+[![Known Vulnerabilities](https://snyk.io/test/github/bitsnap/babel-plugin-lodash-magic-import/badge.svg)](https://snyk.io/test/github/bitsnap/babel-plugin-lodash-magic-import)
 
 Magic import 🍒 picks lodash 📦 for you.
 

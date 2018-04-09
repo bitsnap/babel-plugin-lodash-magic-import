@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-lodash-magic-import",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Transforms lodash imports into tree-shakeable ones",
   "keywords": [
     "babel",
@@ -44,7 +44,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-lodash-fp": "^2.1.3",
     "eslint-plugin-react": "^7.5.1",
-    "eslint-plugin-unicorn": "^3.0.0",
+    "eslint-plugin-unicorn": "^4.0.3",
     "nyc": "^11.3.0",
     "rollup": "^0.57.1",
     "rollup-plugin-babel": "^4.0.0-beta.4",

@@ -30,21 +30,44 @@ const transform = (code, options = {}) =>
 const replaceNewlines = _.replace(/\n+/gm, ' ');
 
 test('Should apply magic transformation', (t) => {
-  t.plan(1);
+  t.plan(2);
 
-  const [input, output] = [
-    'import x from \'lodash/fp\'; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);',
+  const testTable = fp => ([
+    `import x from 'lodash${fp ? '/fp' : ''}'; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);`,
     _.join(' ')([
-      'import _identity from "lodash/fp/identity";',
-      'import _map from "lodash/fp/map";',
-      'import _keys from "lodash/fp/keys";',
-      'import _get from "lodash/fp/get";',
+      `import _identity from "lodash${fp ? '/fp' : ''}/identity";`,
+      `import _map from "lodash${fp ? '/fp' : ''}/map";`,
+      `import _keys from "lodash${fp ? '/fp' : ''}/keys";`,
+      `import _get from "lodash${fp ? '/fp' : ''}/get";`,
       'const a = {}; _get("some"); _keys(["re", "x"], {});',
       '_map(_identity);',
     ]),
-  ];
+  ]);
 
+  let [input, output] = testTable(true);
   t.equal(replaceNewlines(transform(input).code), output);
+
+  [input, output] = testTable();
+  t.equal(replaceNewlines(transform(input).code), output);
+});
+
+test('Should apply magic cached transformation', (t) => {
+  t.plan(2);
+
+  const testTable = fp => ([
+    `import x from 'lodash${fp ? '/fp' : ''}'; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);`,
+    _.join(' ')([
+      `const _ = require("lodash-magic-cache").${fp ? 'fp' : 'lodash'}(["get", "keys", "map", "identity"]);`,
+      'const a = {}; _get("some"); _keys(["re", "x"], {});',
+      '_map(_identity);',
+    ]),
+  ]);
+
+  let [input, output] = testTable(true);
+  t.equal(replaceNewlines(transform(input, { cache: true }).code), output);
+
+  [input, output] = testTable();
+  t.equal(replaceNewlines(transform(input, { cache: true }).code), output);
 });
 
 test('Should remove lodash variable declaration', (t) => {

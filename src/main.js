@@ -1,6 +1,7 @@
 import _startsWith from 'lodash/fp/startsWith';
 import _get from 'lodash/fp/get';
 import _find from 'lodash/fp/find';
+import _isString from 'lodash/fp/isString';
 import _isEqual from 'lodash/fp/isEqual';
 import _includes from 'lodash/fp/includes';
 import _assignIn from 'lodash/fp/assignIn';
@@ -18,6 +19,7 @@ const _ = {
   get: _get,
   find: _find,
   isEqual: _isEqual,
+  isString: _isString,
   includes: _includes,
   assignIn: _assignIn,
   map: _map,
@@ -110,14 +112,33 @@ const importLodashDeclaration = (t, useFp, fnName) =>
     t.importDefaultSpecifier(t.identifier(`_${fnName}`)),
   ], t.stringLiteral(`lodash/${useFp ? 'fp/' : ''}${fnName}`));
 
+const cachedRequire = (t, useFp, fnNames) =>
+  t.variableDeclaration('const', [
+    t.variableDeclarator(
+      t.identifier('_'),
+      t.callExpression(
+        t.memberExpression(
+          t.callExpression(t.identifier('require'), [t.stringLiteral('lodash-magic-cache')]),
+          t.identifier(useFp ? 'fp' : 'lodash'),
+          false,
+        ),
+        [_.isString(fnNames) ?
+          t.identifier(fnNames)
+          : t.arrayExpression(_.map(t.stringLiteral)(fnNames))],
+      ),
+    ),
+  ]);
+
 export default function Plugin({
   types: t,
 }) {
   return {
     visitor: {
-      Program(path) {
+      Program(path, state) {
         const isModule = _.find(t.isModuleDeclaration)(path.hub.file.ast.program.body);
         if (isModule) {
+          const useMagicCache = _.get('opts.cache')(state);
+
           const usedFunctions = [];
           /* eslint-disable prefer-const */
           const lodashUsage = [false, false];
@@ -135,11 +156,16 @@ export default function Plugin({
             throw path.buildCodeFrameError('Add a lodash or lodash/fp import');
           }
 
-          const importNodeFor = fnName => importLodashDeclaration(t, useLodashFp, fnName);
-          const importNodes = _.map(importNodeFor)(usedFunctions);
-
           const programPrepend = node => path.unshiftContainer('body', node);
-          _.forEach(programPrepend)(importNodes);
+
+          if (useMagicCache) {
+            programPrepend(cachedRequire(t, useLodashFp, usedFunctions));
+          } else {
+            const importNodeFor = fnName => importLodashDeclaration(t, useLodashFp, fnName);
+            const importNodes = _.map(importNodeFor)(usedFunctions);
+
+            _.forEach(programPrepend)(importNodes);
+          }
         }
 
         path.stop();

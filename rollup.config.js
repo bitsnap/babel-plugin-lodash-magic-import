@@ -36,6 +36,7 @@ export default {
     'lodash/fp/overSome',
     'lodash/fp/find',
     'lodash/fp/isEqual',
+    'lodash/fp/isString',
     'lodash/fp/includes',
     'lodash/fp/assignIn',
     'lodash/fp/map',

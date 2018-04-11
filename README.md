@@ -52,15 +52,33 @@ will be removed and replaced.
 }
 ```
 
-You know the drill already...
+if you want to use the [lodash-magic-cache](https://github.com/bitsnap/lodash-magic-cache) go for 
+
+```
+{
+  "plugins": [["lodash-magic-import", { "cache": true }],
+  "presets": [["env", { "targets": { "node": true } }]],
+}
+```
+
+and make sure you've 
+
+```
+npm i --save lodash-magic-cache
+```
 
 ### How it differs from [babel-plugin-lodash](https://github.com/lodash/babel-plugin-lodash) ?
 
 It's much simpler.
 
-We'll provide an eslint plugin and the module caching support, using dynamic `require`, in the nearest future.
+We'll provide an eslint plugin in the nearest future.
+Although [lodash-magic-cache](https://github.com/bitsnap/lodash-magic-cache) is ready.
 
-`lodash-magic-import` is completely pointless with `lodash-es` and prohibits usage of Seq and _.chain methods, for the greater good 🎀.
+`lodash-magic-import` is completely pointless with `lodash-es` and prohibits usage of Seq and `_.chain` methods, for the greater good 🎀.
+
+### Q&A
+
+Feel free to ask some questions [via Discord](http://discord.gg/P7W9v9B).
 
 ## License
 

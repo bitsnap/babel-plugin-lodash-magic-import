@@ -11,6 +11,7 @@ import _reduce from 'lodash/fp/reduce';
 import _remove from 'lodash/fp/remove';
 import _isEmpty from 'lodash/fp/isEmpty';
 import _overSome from 'lodash/fp/overSome';
+import _concat from 'lodash/fp/concat';
 
 import functions from 'lodash-functions';
 
@@ -28,7 +29,12 @@ const _ = {
   remove: _remove,
   isEmpty: _isEmpty,
   overSome: _overSome,
+  concat: _concat,
 };
+
+const match = s => _.overSome([_.startsWith(s), _.isEqual(s)]);
+const matchLodash = match('lodash');
+const matchLodashFp = match('lodash/fp');
 
 /* eslint-disable no-param-reassign */
 const removeLodashImports = lodashUsage => ({
@@ -38,15 +44,8 @@ const removeLodashImports = lodashUsage => ({
       throw path.buildCodeFrameError('lodash-magic-import plugin is completely useless with lodash-es');
     }
 
-    const lodashFp = _.overSome([
-      _.startsWith('lodash/fp/'),
-      _.isEqual('lodash/fp'),
-    ])(moduleName);
-
-    const lodash = _.overSome([
-      _.startsWith('lodash/'),
-      _.isEqual('lodash'),
-    ])(moduleName) && !lodashFp;
+    const lodashFp = matchLodashFp(moduleName);
+    const lodash = matchLodash(moduleName) && !lodashFp;
 
     lodashUsage[0] = lodashUsage[0] || lodash; // useLodash
     lodashUsage[1] = lodashUsage[1] || lodashFp; // useLodashFp
@@ -112,20 +111,23 @@ const importLodashDeclaration = (t, useFp, fnName) =>
     t.importDefaultSpecifier(t.identifier(`_${fnName}`)),
   ], t.stringLiteral(`lodash/${useFp ? 'fp/' : ''}${fnName}`));
 
-const cachedRequire = (t, useFp, fnNames) =>
+const magicCache = (t, useFp) =>
   t.variableDeclaration('const', [
     t.variableDeclarator(
-      t.identifier('_'),
-      t.callExpression(
-        t.memberExpression(
-          t.callExpression(t.identifier('require'), [t.stringLiteral('lodash-magic-cache')]),
-          t.identifier(useFp ? 'fp' : 'lodash'),
-          false,
-        ),
-        [_.isString(fnNames) ?
-          t.identifier(fnNames)
-          : t.arrayExpression(_.map(t.stringLiteral)(fnNames))],
+      t.identifier('_magicache'),
+      t.memberExpression(
+        t.callExpression(t.identifier('require'), [t.stringLiteral('lodash-magic-cache')]),
+        t.identifier(useFp ? 'fp' : 'lodash'),
+        false,
       ),
+    ),
+  ]);
+
+const magicCacheRequire = (t, fnName) =>
+  t.VariableDeclaration('const', [
+    t.variableDeclarator(
+      t.identifier(`_${fnName}`),
+      t.callExpression(t.identifier('_magicache'), [t.stringLiteral(fnName)]),
     ),
   ]);
 
@@ -159,16 +161,17 @@ export default function Plugin({
           const programPrepend = node => path.unshiftContainer('body', node);
 
           if (useMagicCache) {
-            programPrepend(cachedRequire(t, useLodashFp, usedFunctions));
+            const cachedNodeFor = fnName => magicCacheRequire(t, fnName);
+            const cachedNodes = _.map(cachedNodeFor)(usedFunctions);
+
+            programPrepend(_.concat(magicCache(t, useLodashFp))(cachedNodes));
           } else {
             const importNodeFor = fnName => importLodashDeclaration(t, useLodashFp, fnName);
             const importNodes = _.map(importNodeFor)(usedFunctions);
 
-            _.forEach(programPrepend)(importNodes);
+            programPrepend(importNodes);
           }
         }
-
-        path.stop();
       },
     },
   };

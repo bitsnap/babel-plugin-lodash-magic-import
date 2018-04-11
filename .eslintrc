@@ -7,14 +7,6 @@
     "lodash-fp",
     "unicorn"
   ],
-  "parserOptions": {
-    "ecmaVersion": 5
-  },
-  "settings": {
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": true
-    }
-  },
   "extends": [
     "airbnb",
     "plugin:lodash-fp/recommended",

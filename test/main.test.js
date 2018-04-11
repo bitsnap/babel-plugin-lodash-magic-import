@@ -14,13 +14,13 @@ const _ = {
   replace: _replace,
 };
 
-const transform = (code, options = {}) =>
+const transform = (code, options = {}, withEnv = false) =>
   babel.transform(code, {
-    presets: [
+    presets: withEnv ? [
       ['@babel/preset-env', {
         targets: { node: true },
       }],
-    ],
+    ] : [],
     plugins: [
       [Plugin, options],
     ],
@@ -33,12 +33,12 @@ test('Should apply magic transformation', (t) => {
   t.plan(2);
 
   const testTable = fp => ([
-    `import x from 'lodash${fp ? '/fp' : ''}'; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);`,
+    `import x from "lodash${fp ? '/fp' : ''}"; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);`,
     _.join(' ')([
-      `import _identity from "lodash${fp ? '/fp' : ''}/identity";`,
-      `import _map from "lodash${fp ? '/fp' : ''}/map";`,
-      `import _keys from "lodash${fp ? '/fp' : ''}/keys";`,
       `import _get from "lodash${fp ? '/fp' : ''}/get";`,
+      `import _keys from "lodash${fp ? '/fp' : ''}/keys";`,
+      `import _map from "lodash${fp ? '/fp' : ''}/map";`,
+      `import _identity from "lodash${fp ? '/fp' : ''}/identity";`,
       'const a = {}; _get("some"); _keys(["re", "x"], {});',
       '_map(_identity);',
     ]),
@@ -55,11 +55,10 @@ test('Should apply magic cached transformation', (t) => {
   t.plan(2);
 
   const testTable = fp => ([
-    `import x from 'lodash${fp ? '/fp' : ''}'; const _ = {}, a = {}; _.get("some"); _.keys(["re", "x"], {}); _.map(_.identity);`,
+    `import x from "lodash${fp ? '/fp' : ''}"; const _ = {}, a = {}; _.get("some");`,
     _.join(' ')([
-      `const _ = require("lodash-magic-cache").${fp ? 'fp' : 'lodash'}(["get", "keys", "map", "identity"]);`,
-      'const a = {}; _get("some"); _keys(["re", "x"], {});',
-      '_map(_identity);',
+      `const _magicache = require("lodash-magic-cache").${fp ? 'fp' : 'lodash'};`,
+      'const _get = _magicache("get"); const a = {}; _get("some");',
     ]),
   ]);
 
@@ -95,4 +94,12 @@ test('Should throw properly', (t) => {
 
   t.plan(testTable.length);
   _.forEach(([input, throws]) => t.throws(() => transform(input), throws))(testTable);
+});
+
+test('Should not break env', (t) => {
+  const source = 'import x from "lodash/fp"; _.get("some"); _.map(_.identity);';
+  t.plan(1);
+
+  const result = transform(source, { cache: false }, true).code;
+  t.ok(result.match(/_interopRequireDefault/));
 });

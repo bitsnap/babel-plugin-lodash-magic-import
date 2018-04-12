@@ -13,6 +13,8 @@ import _isEmpty from 'lodash/fp/isEmpty';
 import _overSome from 'lodash/fp/overSome';
 import _concat from 'lodash/fp/concat';
 
+import { requireLodashDeclaration, magicCache, importLodashDeclaration } from 'nodes';
+
 import functions from 'lodash-functions';
 
 const _ = {
@@ -60,19 +62,15 @@ const removeLodashImports = lodashUsage => ({
   },
 });
 
-const checkProhibitedFunction = (path, fnName) => {
-  if (_.includes(fnName)(['chain', 'tap', 'thru'])) {
-    throw path.buildCodeFrameError(`Using _.${fnName} method is prohibited`);
-  }
-};
-
 const replaceAndGet = (t, usedFunctions) => ({
   Identifier(path) {
     if (_.get('node.name')(path) === '_') {
       const memberExpression = path.findParent(p => p.isMemberExpression());
       const fnName = _.get('node.property.name')(memberExpression);
       if (fnName) {
-        checkProhibitedFunction(path, fnName);
+        if (_.includes(fnName)(['chain', 'tap', 'thru'])) {
+          throw path.buildCodeFrameError(`Using _.${fnName} method is prohibited`);
+        }
 
         if (_.includes(fnName)(functions)) {
           memberExpression.replaceWith(t.identifier(`_${fnName}`));
@@ -106,30 +104,6 @@ const replaceAndGet = (t, usedFunctions) => ({
   },
 });
 
-const importLodashDeclaration = (t, useFp, fnName) =>
-  t.importDeclaration([
-    t.importDefaultSpecifier(t.identifier(`_${fnName}`)),
-  ], t.stringLiteral(`lodash/${useFp ? 'fp/' : ''}${fnName}`));
-
-const magicCache = (t, useFp) =>
-  t.variableDeclaration('const', [
-    t.variableDeclarator(
-      t.identifier('_magicache'),
-      t.memberExpression(
-        t.callExpression(t.identifier('require'), [t.stringLiteral('lodash-magic-cache')]),
-        t.identifier(useFp ? 'fp' : 'lodash'),
-        false,
-      ),
-    ),
-  ]);
-
-const magicCacheRequire = (t, fnName) =>
-  t.VariableDeclaration('const', [
-    t.variableDeclarator(
-      t.identifier(`_${fnName}`),
-      t.callExpression(t.identifier('_magicache'), [t.stringLiteral(fnName)]),
-    ),
-  ]);
 
 export default function Plugin({
   types: t,
@@ -161,7 +135,7 @@ export default function Plugin({
           const programPrepend = node => path.unshiftContainer('body', node);
 
           if (useMagicCache) {
-            const cachedNodeFor = fnName => magicCacheRequire(t, fnName);
+            const cachedNodeFor = fnName => requireLodashDeclaration(t, fnName);
             const cachedNodes = _.map(cachedNodeFor)(usedFunctions);
 
             programPrepend(_.concat(magicCache(t, useLodashFp))(cachedNodes));

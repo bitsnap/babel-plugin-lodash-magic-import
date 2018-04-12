@@ -55,7 +55,7 @@ if you want to use the [lodash-magic-cache](https://github.com/bitsnap/lodash-ma
 
 ```
 {
-  "plugins": [["lodash-magic-import", { "cache": true }],
+  "plugins": [["lodash-magic-import", { "cache": true }]],
   "presets": [["env", { "targets": { "node": true } }]],
 }
 ```

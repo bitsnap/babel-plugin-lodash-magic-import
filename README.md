@@ -66,12 +66,14 @@ and make sure you've
 npm i --save lodash-magic-cache
 ```
 
+also check out [eslint-plugin-lodash-magic-import](https://github.com/bitsnap/eslint-plugin-lodash-magic-import).
+
 ### How it differs from [babel-plugin-lodash](https://github.com/lodash/babel-plugin-lodash) ?
 
 It's much simpler.
 
-We'll provide an eslint plugin in the nearest future.
-Although [lodash-magic-cache](https://github.com/bitsnap/lodash-magic-cache) is ready.
+We've got a [lodash-magic-cache](https://github.com/bitsnap/lodash-magic-cache) for CommonJS modules caching,
+and a [eslint-plugin-lodash-magic-import](https://github.com/bitsnap/eslint-plugin-lodash-magic-import) for basic compatibility checks.
 
 `lodash-magic-import` is completely pointless with `lodash-es` and prohibits usage of Seq and `_.chain` methods, for the greater good 🎀.
 

@@ -34,7 +34,7 @@ const _ = {
   concat: _concat,
 };
 
-const match = s => _.overSome([_.startsWith(s), _.isEqual(s)]);
+const match = s => _.overSome([_.startsWith(`${s}/`), _.isEqual(s)]);
 const matchLodash = match('lodash');
 const matchLodashFp = match('lodash/fp');
 

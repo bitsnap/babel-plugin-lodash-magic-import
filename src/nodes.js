@@ -16,7 +16,7 @@ export const magicCache = (t, useFp, modules) =>
       t.callExpression(
         t.memberExpression(
           t.callExpression(t.identifier('require'), [t.stringLiteral('lodash-magic-cache')]),
-          t.identifier(useFp ? 'fp' : 'lodash'),
+          t.identifier(useFp ? 'lodashFP' : 'lodash'),
         ),
         [t.arrayExpression(_.map(t.stringLiteral)(modules))],
       ),

@@ -13,7 +13,7 @@ import _isEmpty from 'lodash/fp/isEmpty';
 import _overSome from 'lodash/fp/overSome';
 import _concat from 'lodash/fp/concat';
 
-import { requireLodashDeclaration, magicCache, importLodashDeclaration } from 'nodes';
+import { magicCache, importLodashDeclaration } from 'nodes';
 
 import functions from 'lodash-functions';
 
@@ -62,7 +62,7 @@ const removeLodashImports = lodashUsage => ({
   },
 });
 
-const replaceAndGet = (t, usedFunctions) => ({
+const replaceAndGet = (t, useMagicCache, usedFunctions) => ({
   Identifier(path) {
     if (_.get('node.name')(path) === '_') {
       const memberExpression = path.findParent(p => p.isMemberExpression());
@@ -73,7 +73,9 @@ const replaceAndGet = (t, usedFunctions) => ({
         }
 
         if (_.includes(fnName)(functions)) {
-          memberExpression.replaceWith(t.identifier(`_${fnName}`));
+          if (!useMagicCache) {
+            memberExpression.replaceWith(t.identifier(`_${fnName}`));
+          }
 
           if (!_.includes(fnName)(usedFunctions)) {
             usedFunctions.push(fnName);
@@ -122,7 +124,7 @@ export default function Plugin({
 
           const visitor = _.reduce(_.assignIn, {})([
             removeLodashImports(lodashUsage),
-            replaceAndGet(t, usedFunctions),
+            replaceAndGet(t, useMagicCache, usedFunctions),
           ]);
 
           path.traverse(visitor);
@@ -135,10 +137,7 @@ export default function Plugin({
           const programPrepend = node => path.unshiftContainer('body', node);
 
           if (useMagicCache) {
-            const cachedNodeFor = fnName => requireLodashDeclaration(t, fnName);
-            const cachedNodes = _.map(cachedNodeFor)(usedFunctions);
-
-            programPrepend(_.concat(magicCache(t, useLodashFp))(cachedNodes));
+            programPrepend(magicCache(t, useLodashFp, usedFunctions));
           } else {
             const importNodeFor = fnName => importLodashDeclaration(t, useLodashFp, fnName);
             const importNodes = _.map(importNodeFor)(usedFunctions);

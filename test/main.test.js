@@ -55,10 +55,10 @@ test('Should apply magic cached transformation', (t) => {
   t.plan(2);
 
   const testTable = fp => ([
-    `import x from "lodash${fp ? '/fp' : ''}"; const _ = {}, a = {}; _.get("some");`,
+    `import x from "lodash${fp ? '/fp' : ''}"; const _ = {}, a = {}; _.get("some"); _.map([]);`,
     _.join(' ')([
-      `const _magicache = require("lodash-magic-cache").${fp ? 'fp' : 'lodash'};`,
-      'const _get = _magicache("get"); const a = {}; _get("some");',
+      `const _ = require("lodash-magic-cache").${fp ? 'fp' : 'lodash'}(["get", "map"]);`,
+      'const a = {}; _.get("some"); _.map([]);',
     ]),
   ]);
 

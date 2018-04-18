@@ -6,6 +6,7 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/bitsnap/babel-plugin-lodash-magic-import.svg)](https://circleci.com/gh/bitsnap/babel-plugin-lodash-magic-import)
 [![Coverage Status](https://coveralls.io/repos/github/bitsnap/babel-plugin-lodash-magic-import/badge.svg?branch=master)](https://coveralls.io/github/bitsnap/babel-plugin-lodash-magic-import?branch=master) 
 [![devDependencies](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import/dev-status.svg)](https://david-dm.org/bitsnap/babel-plugin-lodash-magic-import#info=devDependencies)
+[![Climate](https://img.shields.io/codeclimate/maintainability/bitsnap/babel-plugin-lodash-magic-import.svg)](https://codeclimate.com/github/bitsnap/babel-plugin-lodash-magic-import)
 
 Magic import 🍒 picks lodash 📦 for you.
 

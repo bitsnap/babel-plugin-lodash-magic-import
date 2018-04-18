@@ -27,6 +27,7 @@ const _ = {
 const writeTestBabelConfig = () => {
   const babelRC = JSON.parse(fs.readFileSync(`${__dirname}/../.babelrc`, { encoding: 'utf8' }).toString());
   babelRC.plugins = _.concat(['./dist/lodash-magic-import.min.js'])(babelRC.plugins);
+  babelRC.presets[0][1].modules = false;
   fs.writeFileSync(`${__dirname}/../.babelrc-test`, JSON.stringify(babelRC, null, 2));
 };
 
@@ -45,13 +46,14 @@ test('Should be buildable', (t) => {
 test('Should be self-testable', (t) => {
   t.plan(1);
   writeTestBabelConfig();
-  const result = proc.spawnSync('./node_modules/.bin/babel', ['src', 'test', '--out-dir', 'here', '--config-file', './.babelrc-test']);
+  const result = proc.spawnSync('./node_modules/.bin/babel', ['src/*.js', 'test', '--out-dir', 'here', '--config-file', './.babelrc-test']);
   t.equal(result.status, 0);
   removeTestBabelConfig();
 });
 
 test('Should not contain duplicate imports', (t) => {
   const dir = `${__dirname}/../here`;
+
   const contents = _.map(filename =>
     _.split('\n')(fs.readFileSync(`${dir}/${filename}`, { encoding: 'utf8' }).toString()))(fs.readdirSync(dir));
 
@@ -64,5 +66,6 @@ test('Should not contain duplicate imports', (t) => {
   _.forEach((imports) => {
     t.deepEqual(_.difference(imports)(_.uniq(imports)), []);
   })(importStatements);
+
   proc.spawnSync('rm', ['-r', dir]);
 });

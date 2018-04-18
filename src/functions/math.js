@@ -1,0 +1,17 @@
+export default [
+  'add',
+  'ceil',
+  'divide',
+  'floor',
+  'max',
+  'maxBy',
+  'mean',
+  'meanBy',
+  'min',
+  'minBy',
+  'multiply',
+  'round',
+  'subtract',
+  'sum',
+  'sumBy',
+];

@@ -14,17 +14,16 @@ const _ = {
   replace: _replace,
 };
 
-const transform = (code, options = {}, withEnv = false) =>
-  babel.transform(code, {
-    presets: withEnv ? [
-      ['@babel/preset-env', {
-        targets: { node: true },
-      }],
-    ] : [],
-    plugins: [
-      [Plugin, options],
-    ],
-  });
+const transform = (code, options = {}, withEnv = false) => babel.transform(code, {
+  presets: withEnv ? [
+    ['@babel/preset-env', {
+      targets: { node: true },
+    }],
+  ] : [],
+  plugins: [
+    [Plugin, options],
+  ],
+});
 
 // Babel 7 newlines are a bit messed up
 const replaceNewlines = _.replace(/\n+/gm, ' ');

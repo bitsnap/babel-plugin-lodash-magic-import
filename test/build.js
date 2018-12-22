@@ -34,7 +34,7 @@ const writeTestBabelConfig = () => {
 const removeTestBabelConfig = () => {
   try {
     fs.unlinkSync(`${__dirname}/../.babelrc-test`);
-  } catch (e) { /**/ }
+  } catch { /**/ }
 };
 
 test('Should be buildable', (t) => {
@@ -54,8 +54,7 @@ test('Should be self-testable', (t) => {
 test('Should not contain duplicate imports', (t) => {
   const dir = `${__dirname}/../here`;
 
-  const contents = _.map(filename =>
-    _.split('\n')(fs.readFileSync(`${dir}/${filename}`, { encoding: 'utf8' }).toString()))(fs.readdirSync(dir));
+  const contents = _.map(filename => _.split('\n')(fs.readFileSync(`${dir}/${filename}`, { encoding: 'utf8' }).toString()))(fs.readdirSync(dir));
 
   const filterImports = _.filter(s => _.startsWith('import')(_.trim(s)));
 

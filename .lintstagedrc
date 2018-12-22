@@ -1,0 +1,20 @@
+{
+	"package.json": [
+		"fixpack",
+		"git add"
+	],
+	"*.js": [
+		"node_modules/.bin/eslint --fix",
+		"git add"
+	],
+	"*.json": [
+		"node_modules/.bin/jsonlint"
+	],
+	".*rc": [
+		"node_modules/.bin/jsonlint"
+	],
+	"*": [
+		"node_modules/.bin/eclint fix",
+		"git add"
+	]
+}

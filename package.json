@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-lodash-magic-import",
   "description": "Transforms lodash imports into tree-shakeable ones",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "authors": [
     "Alex Veligura <veligura@outlook.com>",
     "Yuriy Yarosh <void.nugget@gmail.com>"

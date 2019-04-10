@@ -30,7 +30,7 @@
     "jsonlint": "^1.6.3",
     "lint-staged": "^8.1.0",
     "nyc": "^13.1.0",
-    "rollup": "^1.0.0",
+    "rollup": "1.9.2",
     "rollup-plugin-babel": "^4.1.0",
     "tape": "^4.9.1"
   },

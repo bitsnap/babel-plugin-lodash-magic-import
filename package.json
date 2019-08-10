@@ -19,7 +19,7 @@
     "coveralls": "^3.0.2",
     "eclint": "^2.8.1",
     "eslint": "^5.8.0",
-    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb": "^18.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-lodash-fp": "^2.2.0-a1",

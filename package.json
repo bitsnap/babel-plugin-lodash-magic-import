@@ -14,7 +14,7 @@
     "@babel/register": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^5.1.0",
-    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-minify": "^0.5.0",
     "coveralls": "^3.0.2",
     "eclint": "^2.8.1",

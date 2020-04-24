@@ -32,7 +32,7 @@
     "nyc": "^13.1.0",
     "rollup": "^1.0.0",
     "rollup-plugin-babel": "^4.1.0",
-    "tape": "^4.9.1"
+    "tape": "^5.0.0"
   },
   "files": [
     "dist/lodash-magic-import.min.js",
